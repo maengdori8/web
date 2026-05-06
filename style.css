@@ -402,6 +402,45 @@ address {
     background-color: #fafafa;
 }
 
+.schedule-table .lunch-row th,
+.schedule-table .lunch-row td {
+    background-color: #fff9ef;
+    color: #5f4a25;
+}
+
+.schedule-table .lunch-row:hover th,
+.schedule-table .lunch-row:hover td {
+    background-color: #fff3dc;
+}
+
+.lunch-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 34px;
+    font-weight: 700;
+}
+
+.lunch-button {
+    padding: 7px 13px;
+    border: 0;
+    border-radius: 999px;
+    background-color: #ffb65c;
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(255, 146, 43, 0.24);
+    transition: all 0.25s;
+}
+
+.lunch-button:hover {
+    background-color: #ff9f2f;
+    transform: translateY(-1px);
+}
+
 .schedule-table td.has-assessment {
     padding-top: 30px;
 }
@@ -441,6 +480,110 @@ address {
 .home-button:hover {
     background-color: #1769dc;
     transform: translateY(-2px);
+}
+
+.modal-open {
+    overflow: hidden;
+}
+
+.lunch-modal[hidden] {
+    display: none;
+}
+
+.lunch-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.lunch-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+.lunch-modal-card {
+    position: relative;
+    z-index: 1;
+    width: min(92vw, 380px);
+    padding: 24px;
+    border-radius: 14px;
+    background-color: #fff;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
+    text-align: center;
+}
+
+.lunch-close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 50%;
+    background-color: #f0f3f7;
+    color: #36516c;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.lunch-close-button:hover {
+    background-color: #e2e9f1;
+}
+
+.lunch-modal-label {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: #edf6ff;
+    color: #2a80ff;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.lunch-modal-card h2 {
+    color: #2a80ff;
+    font-size: 24px;
+}
+
+.lunch-day {
+    margin-top: 6px;
+    color: #667788;
+    font-weight: 700;
+}
+
+.lunch-menu-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.lunch-menu-list li {
+    padding: 10px 12px;
+    border: 1px solid #ffe1bd;
+    border-radius: 8px;
+    background-color: #fff9ef;
+    color: #4a3d2b;
+    font-weight: 700;
+}
+
+.lunch-menu-list li.lunch-calorie {
+    border-color: #d9e2ec;
+    background-color: #f8fbff;
+    color: #36516c;
+}
+
+.lunch-note {
+    margin-top: 14px;
+    color: #8a98a8;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 @media (max-width: 700px) {
@@ -489,5 +632,14 @@ address {
 
     .assessment-delete-button {
         align-self: flex-end;
+    }
+
+    .lunch-cell {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .lunch-modal-card {
+        padding: 22px 18px;
     }
 }
