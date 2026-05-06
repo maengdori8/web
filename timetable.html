@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>나만의 시간표</title>
-    <link rel="stylesheet" href="style.css?v=timetable-2">
+    <link rel="stylesheet" href="style.css?v=timetable-3">
 </head>
 <body class="timetable-page">
     <header id="header">
@@ -24,6 +24,56 @@
         </section>
 
         <section class="timetable-card" aria-label="월요일부터 금요일까지의 시간표">
+            <section class="assessment-panel" aria-labelledby="assessment-title">
+                <h2 id="assessment-title">수행평가</h2>
+
+                <form class="assessment-form" id="assessment-form">
+                    <div class="assessment-field">
+                        <label for="assessment-date">날짜</label>
+                        <input type="date" id="assessment-date" required>
+                    </div>
+
+                    <div class="assessment-field">
+                        <label for="assessment-period">교시</label>
+                        <select id="assessment-period" required>
+                            <option value="1">1교시</option>
+                            <option value="2">2교시</option>
+                            <option value="3">3교시</option>
+                            <option value="4">4교시</option>
+                            <option value="5">5교시</option>
+                            <option value="6">6교시</option>
+                            <option value="7">7교시</option>
+                        </select>
+                    </div>
+
+                    <div class="assessment-field">
+                        <label for="assessment-subject">과목명</label>
+                        <input type="text" id="assessment-subject" list="subject-options" required>
+                        <datalist id="subject-options">
+                            <option value="자료 구조">
+                            <option value="프로그래밍 언어 활용">
+                            <option value="문학">
+                            <option value="한국사1">
+                            <option value="응용SW 기초 기술 활용">
+                            <option value="영어I">
+                            <option value="미술">
+                            <option value="자율·자치활동">
+                            <option value="스포츠 문화">
+                        </datalist>
+                    </div>
+
+                    <div class="assessment-field assessment-content-field">
+                        <label for="assessment-content">내용</label>
+                        <input type="text" id="assessment-content" placeholder="배열 실습 평가, 단원 확인" required>
+                    </div>
+
+                    <button class="assessment-add-button" type="submit">추가</button>
+                </form>
+
+                <p class="assessment-message" id="assessment-message" role="status" aria-live="polite"></p>
+                <ul class="assessment-list" id="assessment-list" aria-label="추가된 수행평가 목록"></ul>
+            </section>
+
             <div class="timetable-scroll">
                 <table class="schedule-table">
                     <thead>
@@ -106,5 +156,244 @@
     <footer id="footer">
         <address>&copy; 성일정보고. All Rights Reserved</address>
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const storageKey = "myTimetableAssessments";
+            const dayNames = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+            const form = document.getElementById("assessment-form");
+            const dateInput = document.getElementById("assessment-date");
+            const periodSelect = document.getElementById("assessment-period");
+            const subjectInput = document.getElementById("assessment-subject");
+            const contentInput = document.getElementById("assessment-content");
+            const message = document.getElementById("assessment-message");
+            const list = document.getElementById("assessment-list");
+            const table = document.querySelector(".schedule-table");
+
+            let assessments = loadAssessments();
+
+            function loadAssessments() {
+                try {
+                    return JSON.parse(localStorage.getItem(storageKey)) || [];
+                } catch (error) {
+                    return [];
+                }
+            }
+
+            function saveAssessments() {
+                localStorage.setItem(storageKey, JSON.stringify(assessments));
+            }
+
+            function getDateInfo(dateValue) {
+                const date = new Date(dateValue + "T00:00:00");
+
+                if (!dateValue || Number.isNaN(date.getTime())) {
+                    return null;
+                }
+
+                const day = date.getDay();
+
+                return {
+                    day: day,
+                    dayName: dayNames[day]
+                };
+            }
+
+            function getScheduleCell(day, period) {
+                if (day < 1 || day > 5) {
+                    return null;
+                }
+
+                const row = table.querySelectorAll("tbody tr")[period - 1];
+                return row ? row.children[day] : null;
+            }
+
+            function getCellSubject(day, period) {
+                const cell = getScheduleCell(day, period);
+
+                if (!cell) {
+                    return "";
+                }
+
+                const clone = cell.cloneNode(true);
+                clone.querySelectorAll(".assessment-badge").forEach(function (badge) {
+                    badge.remove();
+                });
+
+                return clone.textContent.trim().replace(/^\*\s*/, "");
+            }
+
+            function setMessage(text, type) {
+                message.textContent = text;
+                message.className = type ? "assessment-message is-" + type : "assessment-message";
+            }
+
+            function updateSubjectFromSchedule() {
+                const dateInfo = getDateInfo(dateInput.value);
+
+                if (!dateInfo || dateInfo.day < 1 || dateInfo.day > 5) {
+                    return;
+                }
+
+                const subject = getCellSubject(dateInfo.day, Number(periodSelect.value));
+
+                if (subject && subject !== "-" && (!subjectInput.value.trim() || subjectInput.dataset.auto === "true")) {
+                    subjectInput.value = subject;
+                    subjectInput.dataset.auto = "true";
+                }
+            }
+
+            function clearBadges() {
+                table.querySelectorAll(".assessment-badge").forEach(function (badge) {
+                    badge.remove();
+                });
+
+                table.querySelectorAll("td.has-assessment").forEach(function (cell) {
+                    cell.classList.remove("has-assessment");
+                });
+            }
+
+            function renderBadges() {
+                const badgeTargets = new Set();
+
+                clearBadges();
+
+                assessments.forEach(function (assessment) {
+                    badgeTargets.add(assessment.day + "-" + assessment.period);
+                });
+
+                badgeTargets.forEach(function (target) {
+                    const parts = target.split("-");
+                    const day = Number(parts[0]);
+                    const period = Number(parts[1]);
+                    const cell = getScheduleCell(day, period);
+
+                    if (!cell) {
+                        return;
+                    }
+
+                    const badge = document.createElement("span");
+                    badge.className = "assessment-badge";
+                    badge.textContent = "수행";
+                    cell.classList.add("has-assessment");
+                    cell.appendChild(badge);
+                });
+            }
+
+            function renderList() {
+                const sortedAssessments = assessments.slice().sort(function (a, b) {
+                    return a.date.localeCompare(b.date) || a.period - b.period;
+                });
+
+                list.innerHTML = "";
+
+                if (sortedAssessments.length === 0) {
+                    const emptyItem = document.createElement("li");
+                    emptyItem.className = "assessment-empty";
+                    emptyItem.textContent = "등록된 수행평가가 없습니다.";
+                    list.appendChild(emptyItem);
+                    return;
+                }
+
+                sortedAssessments.forEach(function (assessment) {
+                    const item = document.createElement("li");
+                    const textBox = document.createElement("div");
+                    const meta = document.createElement("strong");
+                    const content = document.createElement("span");
+                    const deleteButton = document.createElement("button");
+
+                    item.className = "assessment-item";
+                    textBox.className = "assessment-item-text";
+                    meta.textContent = assessment.date + " " + assessment.dayName + " " + assessment.period + "교시 · " + assessment.subject;
+                    content.textContent = assessment.content;
+                    deleteButton.type = "button";
+                    deleteButton.className = "assessment-delete-button";
+                    deleteButton.dataset.id = assessment.id;
+                    deleteButton.textContent = "삭제";
+                    deleteButton.setAttribute("aria-label", assessment.content + " 삭제");
+
+                    textBox.appendChild(meta);
+                    textBox.appendChild(content);
+                    item.appendChild(textBox);
+                    item.appendChild(deleteButton);
+                    list.appendChild(item);
+                });
+            }
+
+            function renderAssessments() {
+                renderBadges();
+                renderList();
+            }
+
+            dateInput.addEventListener("change", function () {
+                const dateInfo = getDateInfo(dateInput.value);
+
+                if (dateInfo && (dateInfo.day === 0 || dateInfo.day === 6)) {
+                    setMessage("월~금 날짜만 입력할 수 있습니다.", "error");
+                    return;
+                }
+
+                setMessage("", "");
+                updateSubjectFromSchedule();
+            });
+
+            periodSelect.addEventListener("change", updateSubjectFromSchedule);
+
+            subjectInput.addEventListener("input", function () {
+                subjectInput.dataset.auto = "false";
+            });
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const dateInfo = getDateInfo(dateInput.value);
+
+                if (!dateInfo) {
+                    setMessage("날짜를 입력해 주세요.", "error");
+                    return;
+                }
+
+                if (dateInfo.day === 0 || dateInfo.day === 6) {
+                    setMessage("월~금 날짜만 입력할 수 있습니다.", "error");
+                    return;
+                }
+
+                assessments.push({
+                    id: Date.now().toString(),
+                    date: dateInput.value,
+                    day: dateInfo.day,
+                    dayName: dateInfo.dayName,
+                    period: Number(periodSelect.value),
+                    subject: subjectInput.value.trim(),
+                    content: contentInput.value.trim()
+                });
+
+                saveAssessments();
+                renderAssessments();
+                form.reset();
+                periodSelect.value = "1";
+                subjectInput.dataset.auto = "false";
+                setMessage("수행평가가 추가되었습니다.", "success");
+            });
+
+            list.addEventListener("click", function (event) {
+                const button = event.target.closest(".assessment-delete-button");
+
+                if (!button) {
+                    return;
+                }
+
+                assessments = assessments.filter(function (assessment) {
+                    return assessment.id !== button.dataset.id;
+                });
+
+                saveAssessments();
+                renderAssessments();
+                setMessage("수행평가가 삭제되었습니다.", "success");
+            });
+
+            renderAssessments();
+        });
+    </script>
 </body>
 </html>
