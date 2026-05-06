@@ -141,3 +141,162 @@ footer {
 address {
     font-style: normal;
 }
+
+/* 시간표 페이지 */
+.timetable-page {
+    padding-bottom: 90px;
+}
+
+.timetable-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px;
+}
+
+.timetable-title-card,
+.timetable-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.timetable-title-card {
+    margin-bottom: 20px;
+    padding: 24px;
+    text-align: center;
+}
+
+.timetable-title-card h1 {
+    font-family: "Hi Melody", sans-serif;
+    font-size: 42px;
+    color: #2a80ff;
+}
+
+.timetable-card {
+    padding: 20px;
+}
+
+.timetable-scroll {
+    overflow-x: auto;
+}
+
+.schedule-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.schedule-table th,
+.schedule-table td {
+    padding: 15px 12px;
+    border-right: 1px solid #d9e2ec;
+    border-bottom: 1px solid #d9e2ec;
+    vertical-align: middle;
+}
+
+.schedule-table thead th {
+    background-color: #2a80ff;
+    color: #fff;
+    font-weight: 700;
+}
+
+.schedule-table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.schedule-table thead th:last-child {
+    border-top-right-radius: 8px;
+    border-right: 0;
+}
+
+.schedule-table tbody th {
+    width: 90px;
+    background-color: #f5f8fb;
+    color: #36516c;
+    font-weight: 700;
+    border-left: 1px solid #d9e2ec;
+}
+
+.schedule-table td {
+    min-width: 140px;
+    background-color: #fff;
+    color: #333;
+    line-height: 1.5;
+}
+
+.schedule-table tbody td:last-child {
+    border-right: 0;
+}
+
+.schedule-table tbody tr:hover th,
+.schedule-table tbody tr:hover td {
+    background-color: #f7fbff;
+}
+
+.schedule-table tbody tr:hover td.important-subject {
+    background-color: #dceeff;
+}
+
+.schedule-table td.important-subject {
+    background-color: #edf6ff;
+    border-left: 4px solid #2a80ff;
+    color: #174f9b;
+    font-weight: 700;
+}
+
+.schedule-table td.empty-subject {
+    color: #aaa;
+    background-color: #fafafa;
+}
+
+.timetable-actions {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.home-button {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 8px;
+    background-color: #2a80ff;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 3px 8px rgba(42, 128, 255, 0.25);
+    transition: all 0.3s;
+}
+
+.home-button:hover {
+    background-color: #1769dc;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 700px) {
+    #header ul {
+        gap: 8px;
+    }
+
+    #header li a {
+        display: block;
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .timetable-container {
+        padding: 18px 12px;
+    }
+
+    .timetable-title-card {
+        padding: 20px 14px;
+    }
+
+    .timetable-title-card h1 {
+        font-size: 34px;
+    }
+
+    .timetable-card {
+        padding: 14px;
+    }
+}

@@ -4,8 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>나만의 시간표</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    곧 제작 예정...
+<body class="timetable-page">
+    <header id="header">
+        <nav aria-label="주요 메뉴">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="index.html">ABOUT ME</a></li>
+                <li><a href="index.html">NOTICE</a></li>
+                <li><a href="index.html">CONTACT</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="timetable-container">
+        <section class="timetable-title-card" aria-labelledby="timetable-title">
+            <h1 id="timetable-title">나만의 시간표</h1>
+        </section>
+
+        <section class="timetable-card" aria-label="월요일부터 금요일까지의 시간표">
+            <div class="timetable-scroll">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">교시</th>
+                            <th scope="col">월요일</th>
+                            <th scope="col">화요일</th>
+                            <th scope="col">수요일</th>
+                            <th scope="col">목요일</th>
+                            <th scope="col">금요일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1교시</th>
+                            <td>자료 구조</td>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                            <td>스포츠 문화</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2교시</th>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                            <td>한국사1</td>
+                            <td>미술</td>
+                            <td>문학</td>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3교시</th>
+                            <td>문학</td>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4교시</th>
+                            <td>한국사1</td>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                            <td class="important-subject">* 프로그래밍 언어 활용</td>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td>문학</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5교시</th>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td>영어I</td>
+                            <td>영어I</td>
+                            <td>한국사1</td>
+                            <td class="empty-subject">-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">6교시</th>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td>미술</td>
+                            <td>자율·자치활동</td>
+                            <td>자료 구조</td>
+                            <td class="empty-subject">-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">7교시</th>
+                            <td class="important-subject">* 응용SW 기초 기술 활용</td>
+                            <td class="empty-subject">-</td>
+                            <td class="empty-subject">-</td>
+                            <td>영어I</td>
+                            <td class="empty-subject">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="timetable-actions">
+            <a class="home-button" href="index.html">HOME</a>
+        </div>
+    </main>
+
+    <footer id="footer">
+        <address>&copy; 성일정보고. All Rights Reserved</address>
+    </footer>
 </body>
 </html>
